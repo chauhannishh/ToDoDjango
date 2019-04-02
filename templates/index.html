@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <title>ToDoApp</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">ToDoApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+
+            </ul>
+            <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'submit_email'%}">
+                {% csrf_token%}
+                <input class="form-control mr-sm-2" type="text" name="email" placeholder="Enter Email">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Subscribe</button>
+            </form>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col-md-6">
+            {% if deleted%}
+            <div style="margin:20px;" class="alert alert-dismissible alert-success">
+
+                <strong>Well done!</strong> You successfully deleted! <a href="#" class="alert-link"></a>.
+            </div>
+            {% endif %}
+
+            {% if update%}
+            <div style="margin:20px;" class="alert alert-dismissible alert-success">
+
+                <strong>Well done!</strong> You successfully updated {{update_val}}! <a href="#"
+                    class="alert-link"></a>.
+            </div>
+            {% endif %}
+
+            <h3 style="text-align:center;margin-top:30px;">Things to Do</h3>
+
+            {% for i in todo %}
+            <div>
+                <div class="card bg-light mb-3" style="max-width: 20rem;margin:auto;margin-top:30px;">
+                    <div class="card-header">{{ i.title }}</div>
+                    <div class="card-body">
+                        <p class="card-text">{{ i.desc }}</p>
+                        <p class="text-info">Deadline : {{ i.schedule_date }}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form method="POST" action="{% url 'update_schedule' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{i.id}}">
+                                <input type="submit" value="Update" class="btn btn-info" style="width: 100%;" />
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <form method="POST" action="{% url 'delete_schedule' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="id" value="{{i.id}}">
+                                <input type="submit" value="Delete" class="btn btn-danger" style="width: 100%;" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+
+        </div>
+        <div class="col-md-6">
+            {% if flag %}
+            <div style="margin:20px;" class="alert alert-dismissible alert-success">
+
+                <strong>Well done!</strong> You successfully added! <a href="#" class="alert-link"></a>.
+            </div>
+            {% endif %}
+            <form style="padding: 35px;" method="POST" action="{% url 'create_schedule' %}">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Add Schedule</legend>
+
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter title"
+                            required>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="Description">Description</label>
+                        <textarea class="form-control" id="exampleTextarea" name="desc" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduledatepicker">Date</label>
+                        <input class="form-control" type="date" name="date" name="schedule" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="reset" class="btn btn-primary">Reset</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

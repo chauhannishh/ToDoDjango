@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <title>ToDoApp</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">ToDoApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+            aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'index'%}">Home <span class="sr-only">(current)</span></a>
+                </li>
+
+        </div>
+    </nav>
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <form style="padding: 35px;" method="POST" action="{% url 'update_schedule_complete' %}">
+                {% csrf_token %}
+                <fieldset>
+                    <legend>Update Schedule</legend>
+
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" name="title" id="title" value="{{title}}">
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="Description">Description</label>
+                        <textarea class="form-control" id="exampleTextarea" name="desc" rows="3">{{desc}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduledatepicker">Date</label>
+                        <input class="form-control" type="date" id="myDate" name="date">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update</button>
+
+                </fieldset>
+            </form>
+            <script>
+
+                var dat = "{{date}}";
+                dal_list = dat.split(" ");
+
+                month = {
+                    'January': "01",
+                    'Febuary': "02",
+                    'March': "03",
+                    'April': "04",
+                    'May': "05",
+                    'June': "06",
+                    'July': "07",
+                    'August': "08",
+                    'September': "09",
+                    'October': "10",
+                    'November': "11",
+                    'December': "12"
+                }[dal_list[0]]
+
+                if (dal_list[1].length == 2) {
+                    dal_list[1] = "0" + dal_list[1]
+                }
+                var val_date = dal_list[2] + "-" + month + "-" + dal_list[1].substring(0, dal_list[1].length - 1)
+
+                document.getElementById("myDate").defaultValue = val_date;
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>
